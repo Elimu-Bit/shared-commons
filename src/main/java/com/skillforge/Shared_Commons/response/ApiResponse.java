@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 @Data
-@Builder(toBuilder = true)
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -42,88 +42,90 @@ public class ApiResponse<T> {
     private long processingTimeMs;
 
     // Builder responses
-    public static <T> ApiResponseBuilder<T> success() {
+    public static <T> ApiResponse<T> success() {
         return ApiResponse.<T>builder()
                 .success(true)
-                .timestamp(LocalDateTime.now());
+                .timestamp(LocalDateTime.now()).build();
     }
 
-    public static <T> ApiResponseBuilder<T> success(T data) {
+    public static <T> ApiResponse<T> success(T data) {
         return ApiResponse.<T>builder()
                 .success(true)
                 .data(data)
-                .timestamp(LocalDateTime.now());
+                .timestamp(LocalDateTime.now()).build();
     }
 
-    public static <T> ApiResponseBuilder<T> success(T data, String message) {
+    public static <T> ApiResponse<T> success(T data, String message) {
         return ApiResponse.<T>builder()
                 .success(true)
                 .data(data)
                 .message(message)
-                .timestamp(LocalDateTime.now());
+                .timestamp(LocalDateTime.now()).build();
     }
 
-    public static <T> ApiResponseBuilder<T> error() {
+    public static <T> ApiResponse<T> error() {
         return ApiResponse.<T>builder()
                 .success(false)
-                .timestamp(LocalDateTime.now());
+                .timestamp(LocalDateTime.now()).build();
     }
 
-    public static <T> ApiResponseBuilder<T> error(String message) {
+    public static <T> ApiResponse<T> error(String message) {
         return ApiResponse.<T>builder()
                 .success(false)
                 .message(message)
-                .timestamp(LocalDateTime.now());
+                .timestamp(LocalDateTime.now()).build();
     }
 
-    public static <T> ApiResponseBuilder<T> error(String message, String errorCode) {
+    public static <T> ApiResponse<T> error(String message, String errorCode) {
         return ApiResponse.<T>builder()
                 .success(false)
                 .message(message)
                 .errorCode(errorCode)
-                .timestamp(LocalDateTime.now());
+                .timestamp(LocalDateTime.now()).build();
     }
 
-    // Builder class for building responses
-    public static class ApiResponseBuilder<T> {
+    public static <T> ApiResponse<T> withPagination(PaginationInfo pagination) {
+        return ApiResponse.<T>builder()
+                .pagination(pagination)
+                .build();
+    }
 
-        public ApiResponseBuilder<T> withPagination(PaginationInfo pagination) {
-            this.pagination = pagination;
-            return this;
-        }
+    public  static <T> ApiResponse<T> withPagination( int page, int size, long total) {
+        return ApiResponse.<T>builder()
+                .pagination(PaginationInfo.of(page, size, total, null, null))
+                .build();
+    }
 
-        public ApiResponseBuilder<T> withPagination(int page, int size, long total) {
-            this.pagination = PaginationInfo.of(page, size, total, null, null);
-            return this;
-        }
+    public static <T> ApiResponse<T> withPagination(int page, int size, long total, String sortBy, String sortDir) {
+        return ApiResponse.<T>builder()
+                .pagination(PaginationInfo.of(page, size, total, sortBy, sortDir))
+                .build();
+    }
 
-        public ApiResponseBuilder<T> withPagination(int page, int size, long total, String sortBy, String sortDir) {
-            this.pagination = PaginationInfo.of(page, size, total, sortBy, sortDir);
-            return this;
-        }
+    public static <T> ApiResponse<T> withProcessingTime(long startTimeMs) {
+        return ApiResponse.<T>builder()
+                .processingTimeMs(System.currentTimeMillis() - startTimeMs)
+                .build();
+    }
 
-        public ApiResponseBuilder<T> withProcessingTime(long startTimeMs) {
-            this.processingTimeMs = System.currentTimeMillis() - startTimeMs;
-            return this;
-        }
+    public static <T> ApiResponse<T> withValidationErrors(Map<String, String> fieldErrors) {
+        return ApiResponse.<T>builder()
+                .fieldErrors(fieldErrors)
+                .build();
+    }
 
-        public ApiResponseBuilder<T> withValidationErrors(Map<String, String> fieldErrors) {
-            this.fieldErrors = fieldErrors;
-            return this;
-        }
+    public static <T> ApiResponse<T> withErrorDetails(Map<String, Object> details) {
+        return ApiResponse.<T>builder()
+                .errorDetails(details)
+                .build();
+    }
 
-        public ApiResponseBuilder<T> withErrorDetails(Map<String, Object> errorDetails) {
-            this.errorDetails = errorDetails;
-            return this;
-        }
-
-        public ApiResponseBuilder<T> withMetadata(String requestId, String serviceName, String path) {
-            this.requestId = requestId;
-            this.serviceName = serviceName;
-            this.path = path;
-            return this;
-        }
-
+    public static <T> ApiResponse<T> withMetadata(String requestId, String serviceName, String path) {
+        return ApiResponse.<T>builder()
+                .requestId(requestId)
+                .serviceName(serviceName)
+                .path(path)
+                .build();
     }
 
 }

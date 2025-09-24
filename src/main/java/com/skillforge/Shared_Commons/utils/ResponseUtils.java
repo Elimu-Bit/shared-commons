@@ -16,34 +16,31 @@ public class ResponseUtils {
     // Success Responses
     public static <T> ResponseEntity<ApiResponse<T>> ok(T data) {
         return ResponseEntity.ok(
-                ApiResponse.success(data).build()
+                ApiResponse.success(data)
         );
     }
 
     public static <T> ResponseEntity<ApiResponse<T>> ok(T data, String message) {
         return ResponseEntity.ok(
-                ApiResponse.success(data, message).build()
+                ApiResponse.success(data, message)
         );
     }
 
     public static <T> ResponseEntity<ApiResponse<T>> created(T data) {
         return ResponseEntity.status(HttpStatus.CREATED).body(
-                ApiResponse.success(data, "Resource created successfully").build()
+                ApiResponse.success(data, "Resource created successfully")
         );
     }
 
     public static <T> ResponseEntity<ApiResponse<T>> created(T data, String message) {
         return ResponseEntity.status(HttpStatus.CREATED).body(
-                ApiResponse.success(data, message).build()
+                ApiResponse.success(data, message)
         );
     }
 
     public static <T> ResponseEntity<ApiResponse<T>> accepted(String message) {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(
-                ApiResponse.<T>success()
-                        .message(message)
-                        .build()
-        );
+                ApiResponse.<T>success());
     }
 
     // Error responses
@@ -53,27 +50,25 @@ public class ResponseUtils {
 
     public static <T> ResponseEntity<ApiResponse<T>> badRequest(String message) {
         return ResponseEntity.badRequest().body(
-                ApiResponse.<T>error(message, "BAD_REQUEST").build()
+                ApiResponse.<T>error(message, "BAD_REQUEST")
         );
     }
 
     public static <T> ResponseEntity<ApiResponse<T>> badRequest(String message, Map<String, String> fieldErrors) {
         return ResponseEntity.badRequest().body(
                 ApiResponse.<T>error(message, "VALIDATION_ERROR")
-                        .withValidationErrors(fieldErrors)
-                        .build()
         );
     }
 
     public static <T> ResponseEntity<ApiResponse<T>> unauthorized() {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
-                ApiResponse.<T>error("Authentication required", "UNAUTHORIZED").build()
+                ApiResponse.<T>error("Authentication required", "UNAUTHORIZED")
         );
     }
 
     public static <T> ResponseEntity<ApiResponse<T>> forbidden() {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
-                ApiResponse.<T>error("Access denied", "FORBIDDEN").build()
+                ApiResponse.<T>error("Access denied", "FORBIDDEN")
         );
     }
 
@@ -83,19 +78,19 @@ public class ResponseUtils {
 
     public static <T> ResponseEntity<ApiResponse<T>> conflict(String message) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(
-                ApiResponse.<T>error(message, "CONFLICT").build()
+                ApiResponse.<T>error(message, "CONFLICT")
         );
     }
 
     public static <T> ResponseEntity<ApiResponse<T>> unprocessableEntity(String message, String errorCode) {
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(
-                ApiResponse.<T>error(message, errorCode).build()
+                ApiResponse.<T>error(message, errorCode)
         );
     }
 
     public static <T> ResponseEntity<ApiResponse<T>> internalServerError() {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                ApiResponse.<T>error("Internal server error", "INTERNAL_SERVER_ERROR").build()
+                ApiResponse.<T>error("Internal server error", "INTERNAL_SERVER_ERROR")
         );
     }
 
