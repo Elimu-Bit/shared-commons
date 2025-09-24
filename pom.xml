@@ -90,9 +90,22 @@
                 <artifactId>maven-surefire-plugin</artifactId>
             </plugin>
 
-
         </plugins>
 
 	</build>
+
+    <distributionManagement>
+        <repository>
+            <id>github-commons</id>
+            <name>Elimu-Bit shared commons package</name>
+            <url>https://maven.pkg.github.com/elimu-bit/shared-commons</url>
+        </repository>
+    </distributionManagement>
+
+    <scm>
+        <connection>scm:git:https://github.com/elimu-bit/shared-commons.git</connection>
+        <developerConnection>scm:git:https://github.com/elimu-bit/shared-commons.git</developerConnection>
+        <url>https://github.com/elimu-bit/shared-commons</url>
+    </scm>
 
 </project>
