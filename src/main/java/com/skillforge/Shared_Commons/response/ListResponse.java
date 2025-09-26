@@ -31,32 +31,4 @@ public class ListResponse<T> {
 
     // Aggregation data (for analytics)
     private Map<String, Object> aggregations;
-
-    public static <T> ListResponse<T> of(List<T> data, PaginationInfo pagination) {
-        return ListResponse.<T>builder()
-                .success(true)
-                .data(data)
-                .pagination(pagination)
-                .timestamp(LocalDateTime.now())
-                .build();
-    }
-
-    public static <T> ListResponse<T> of(List<T> data, int page, int size, long total) {
-        return ListResponse.<T>builder()
-                .success(true)
-                .data(data)
-                .pagination(PaginationInfo.of(page, size, total, null, null))
-                .timestamp(LocalDateTime.now())
-                .build();
-    }
-
-    public static <T> ListResponse<T> empty(int page, int size) {
-        return ListResponse.<T>builder()
-                .success(true)
-                .data(List.of())
-                .pagination(PaginationInfo.of(page, size, 0L, null, null))
-                .timestamp(LocalDateTime.now())
-                .build();
-    }
-
 }
