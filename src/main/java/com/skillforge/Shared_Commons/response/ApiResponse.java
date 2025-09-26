@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 @Data
-@Builder
+@Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 public class ApiResponse<T> {
@@ -39,5 +39,89 @@ public class ApiResponse<T> {
 
     private long processingTimeMs;
 
+    // Builder responses
+    public static <T> ApiResponseBuilder<T> success() {
+        return ApiResponse.<T>builder()
+                .success(true)
+                .timestamp(LocalDateTime.now());
+    }
+
+    public static <T> ApiResponseBuilder<T> success(T data) {
+        return ApiResponse.<T>builder()
+                .success(true)
+                .data(data)
+                .timestamp(LocalDateTime.now());
+    }
+
+    public static <T> ApiResponseBuilder<T> success(T data, String message) {
+        return ApiResponse.<T>builder()
+                .success(true)
+                .data(data)
+                .message(message)
+                .timestamp(LocalDateTime.now());
+    }
+
+    public static <T> ApiResponseBuilder<T> error() {
+        return ApiResponse.<T>builder()
+                .success(false)
+                .timestamp(LocalDateTime.now());
+    }
+
+    public static <T> ApiResponseBuilder<T> error(String message) {
+        return ApiResponse.<T>builder()
+                .success(false)
+                .message(message)
+                .timestamp(LocalDateTime.now());
+    }
+
+    public static <T> ApiResponseBuilder<T> error(String message, String errorCode) {
+        return ApiResponse.<T>builder()
+                .success(false)
+                .message(message)
+                .errorCode(errorCode)
+                .timestamp(LocalDateTime.now());
+    }
+
+    // Builder class for building responses
+    public static class ApiResponseBuilder<T> {
+
+        public ApiResponseBuilder<T> withPagination(PaginationInfo pagination) {
+            this.pagination = pagination;
+            return this;
+        }
+
+        public ApiResponseBuilder<T> withPagination(int page, int size, long total) {
+            this.pagination = PaginationInfo.of(page, size, total, null, null);
+            return this;
+        }
+
+        public ApiResponseBuilder<T> withPagination(int page, int size, long total, String sortBy, String sortDir) {
+            this.pagination = PaginationInfo.of(page, size, total, sortBy, sortDir);
+            return this;
+        }
+
+        public ApiResponseBuilder<T> withProcessingTime(long startTimeMs) {
+            this.processingTimeMs = System.currentTimeMillis() - startTimeMs;
+            return this;
+        }
+
+        public ApiResponseBuilder<T> withValidationErrors(Map<String, String> fieldErrors) {
+            this.fieldErrors = fieldErrors;
+            return this;
+        }
+
+        public ApiResponseBuilder<T> withErrorDetails(Map<String, Object> errorDetails) {
+            this.errorDetails = errorDetails;
+            return this;
+        }
+
+        public ApiResponseBuilder<T> withMetadata(String requestId, String serviceName, String path) {
+            this.requestId = requestId;
+            this.serviceName = serviceName;
+            this.path = path;
+            return this;
+        }
+
+    }
 
 }
